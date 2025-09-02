@@ -3,28 +3,11 @@ alias = "bf"
 description = "Apply biome safe fixes and format code"
 run = ["biome check --fix --config-path=biome.jsonc", "dprint fmt"]
 
-[tasks.build-circuit-types]
-dir = "circuit"
-hide = true
-run = "tsc --project tsconfig.build.json"
-quiet = true
-
-[tasks.build-circuit-dist]
-dir = "circuit"
-hide = true
-run = "bun build.ts"
-quiet = true
-
 [tasks.build-circuit]
 alias = "bc"
-description = "Bundle circuit pkg"
+description = "Buil circuit"
 dir = "circuit"
-run = [
-  "rm -fr dist target",
-  "nargo compile",
-  "mise r build-circuit-*",
-  "cp dist/worker.js target/circuit.json ../node_modules/@noir-lang/acvm_js/web/acvm_js_bg.wasm ../node_modules/@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm ../web/public/",
-]
+run = "scarb --release build"
 
 [tasks.build-web]
 alias = "bw"
@@ -49,10 +32,11 @@ dir = "web"
 run = ["mise run build-circuit", "bun vite"]
 quiet = true
 
-[tasks.generate-proof]
-description = "Generate proof and save proof and public inputs"
+[tasks.execute-circuit]
+alias = "ec"
+description = "Execute the circuit with arguments - Usage: mise r ec {argument}"
 dir = "circuit"
-run = "bb prove -b ./target/circuit.json -w ./target/circuit.gz -o ./target"
+run = "scarb execute -p circuit --print-program-output --arguments"
 
 [tasks.preview]
 alias = "p"
@@ -65,7 +49,7 @@ quiet = true
 alias = "tc"
 description = "Run circuit tests"
 dir = "circuit"
-run = "nargo test"
+run = "scarb test"
 
 [tools]
 bun = "latest"
@@ -76,3 +60,5 @@ pkl = "latest"
 "npm:@biomejs/biome" = "latest"
 "npm:typescript" = "latest"
 "asdf:scarb" = "latest"
+"cargo:cairo-format" = "latest"
+rust = { version = "nightly-2025-04-06", profile = "minimal" }

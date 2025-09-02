@@ -1,25 +1,24 @@
-fn main() -> u32 {
-    fib(16)
+fn is_over_eighteen(age: u32) -> bool {
+  age > 18
 }
 
-fn fib(mut n: u32) -> u32 {
-    let mut a: u32 = 0;
-    let mut b: u32 = 1;
-    while n != 0 {
-        n = n - 1;
-        let temp = b;
-        b = a + b;
-        a = temp;
-    };
-    a
+#[executable]
+fn main(age: u32) -> bool {
+    is_over_eighteen(age)
 }
+
 
 #[cfg(test)]
 mod tests {
-    use super::fib;
+    use super::is_over_eighteen;
 
     #[test]
-    fn it_works() {
-        assert(fib(16) == 987, 'it works!');
+    fn it_is_true_if_over_eighteen() {
+       assert!( is_over_eighteen(19));
+    }
+
+    #[test]
+    fn it_is_false_if_under_eighteen() {
+        assert!(!is_over_eighteen(17));
     }
 }

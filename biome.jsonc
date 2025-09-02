@@ -1,0 +1,54 @@
+{
+  "root": false,
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  // organize imports with dprint
+  "assist": {
+    "actions": { "source": { "organizeImports": "off", "useSortedAttributes": "on", "useSortedProperties": "on" } },
+  },
+  "files": {
+    "includes": ["**", "!**/routeTree.gen.ts", "!**/dist", "!**/public"],
+  },
+  // format with dprint
+  "formatter": {
+    "enabled": false,
+  },
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true,
+    },
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "complexity": {
+        "useLiteralKeys": "off",
+      },
+      "correctness": {
+        // @tanstack/form form fields use children prop
+        "noChildrenProp": "off",
+      },
+      "recommended": true,
+      "style": {
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error",
+      },
+    },
+  },
+  "overrides": [
+    { "includes": ["**/*.css"], "linter": { "rules": { "suspicious": { "noUnknownAtRules": "off" } } } },
+  ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+  },
+}

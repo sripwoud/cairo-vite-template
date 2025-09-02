@@ -1,0 +1,44 @@
+name: main
+on:
+  # push trigger required to get coveralls monitoring of default branch
+  # pull_request required to get PR coveralls comments
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# no need to bother caching bun deps
+# https://github.com/oven-sh/setup-bun/issues/14#issuecomment-1714116221
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Noir toolchain
+        shell: bash
+        run: |
+          curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+          echo "$HOME/.nargo/bin" >> $GITHUB_PATH
+          ~/.nargo/bin/noirup
+      - uses: jdx/mise-action@v2
+        with:
+          mise_toml: |
+            [tasks]
+            "build-circuit" = { dir = "circuit", run = ["nargo compile", "bun build.ts", "tsc -p tsconfig.build.json"] }
+            "build-web" = { dir= "web", run = "bun vite build"}
+            "build" = { depends = "build-*" }
+            "check-format" = { run = "dprint check --excludes mise.toml" }
+            "check-lint" = { run = "biome check --config-path=biome.jsonc --no-errors-on-unmatched" }
+            "check-types" = { run = ["tsc -p web/tsconfig.app.json", "tsc -p circuit/tsconfig.json"] }
+            "check" = { depends = "check-*" }
+            [tools]
+            bun = "latest"
+            dprint = "latest"
+            "npm:@biomejs/biome" = "latest"
+            "npm:typescript" = "latest"
+      - name: Install dependencies
+        run: bun i
+      - name: Build
+        run: mise r build
+      - name: Check
+        run: mise r check

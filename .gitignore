@@ -1,0 +1,15 @@
+.claude
+CLAUDE.md
+dist
+node_modules
+coverage
+lcov.info
+target
+*tsbuildinfo
+.env
+.tanstack
+.vscode
+.membank
+# wasm and worker file are copied during build
+web/public/*
+!web/public/.gitkeep

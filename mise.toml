@@ -1,0 +1,78 @@
+[tasks.fix]
+alias = "bf"
+description = "Apply biome safe fixes and format code"
+run = ["biome check --fix --config-path=biome.jsonc", "dprint fmt"]
+
+[tasks.build-circuit-types]
+dir = "circuit"
+hide = true
+run = "tsc --project tsconfig.build.json"
+quiet = true
+
+[tasks.build-circuit-dist]
+dir = "circuit"
+hide = true
+run = "bun build.ts"
+quiet = true
+
+[tasks.build-circuit]
+alias = "bc"
+description = "Bundle circuit pkg"
+dir = "circuit"
+run = [
+  "rm -fr dist target",
+  "nargo compile",
+  "mise r build-circuit-*",
+  "cp dist/worker.js target/circuit.json ../node_modules/@noir-lang/acvm_js/web/acvm_js_bg.wasm ../node_modules/@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm ../web/public/",
+]
+
+[tasks.build-web]
+alias = "bw"
+description = "Build the web app"
+dir = "web"
+run = ["bun tsc -b", "bun vite build"]
+quiet = true
+
+[tasks.build]
+alias = "b"
+description = "Build the circuit and web app"
+run = [
+  "mise r build-circuit",
+  "mise r build-web",
+]
+quiet = true
+
+[tasks.dev]
+alias = "d"
+description = "Start the dev server"
+dir = "web"
+run = ["mise run build-circuit", "bun vite"]
+quiet = true
+
+[tasks.generate-proof]
+description = "Generate proof and save proof and public inputs"
+dir = "circuit"
+run = "bb prove -b ./target/circuit.json -w ./target/circuit.gz -o ./target"
+
+[tasks.preview]
+alias = "p"
+description = "Preview the app"
+dir = "web"
+run = "bun vite preview"
+quiet = true
+
+[tasks.test-circuit]
+alias = "tc"
+description = "Run circuit tests"
+dir = "circuit"
+run = "nargo test"
+
+[tools]
+bun = "latest"
+"cargo:convco" = "latest"
+dprint = "latest"
+hk = "latest"
+pkl = "latest"
+"npm:@biomejs/biome" = "latest"
+"npm:typescript" = "latest"
+"asdf:scarb" = "latest"

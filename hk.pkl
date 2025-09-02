@@ -1,0 +1,22 @@
+amends "package://github.com/jdx/hk/releases/download/v1.1.0/hk@1.1.0#/Config.pkl"
+
+local linters  = new Mapping<String, Step> {
+  ["fmt"]  {
+    fix = "dprint fmt"
+    stage = "*"
+  }
+  ["lint"] {
+    check = "biome check --config-path=biome.jsonc --no-errors-on-unmatched {{files}}"
+  }
+  ["typecheck"] {
+    check = "tsc -p web/tsconfig.app.json && tsc -p circuit/tsconfig.json"
+  }
+}
+
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = linters
+  }
+}

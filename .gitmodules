@@ -1,0 +1,5 @@
+[submodule "circuit/stwo-cairo"]
+	branch = main
+	path = circuit/stwo-cairo
+	shallow = true
+	url = git@github.com:starkware-libs/stwo-cairo.git

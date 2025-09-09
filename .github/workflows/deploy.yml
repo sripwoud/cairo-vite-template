@@ -29,10 +29,11 @@ jobs:
             [tasks]
             build-circuit-types = { dir = "circuit", run = "tsc -p tsconfig.build.json" }
             build-circuit-dist = { dir = "circuit", run = "bun build.ts" }
-            build-circuit = { dir = "circuit", run = ["nargo compile", "mise r build-circuit-*", "cp dist/worker.js target/circuit.json ../node_modules/@noir-lang/acvm_js/web/acvm_js_bg.wasm ../node_modules/@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm ../web/public/"] }
+            build-circuit = { dir = "circuit", run = ["scarb --release build", "mise r build-circuit-*", "cp  src/lib.cairo dist/worker.js ../node_modules/@cryptonerdcn/wasm-cairo/wasm-cairo_bg.wasm ../web/public/"] }
             build-web = { dir = "web", run = ["tsc -b", "bun vite build"] }
             build = { run = ["mise r build-circuit", "mise r build-web"] }
             [tools]
+            "asdf:scarb" = "latest"
             "npm:typescript" = "latest"
 
       - name: Install dependencies

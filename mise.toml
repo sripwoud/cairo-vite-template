@@ -35,6 +35,7 @@ run = [
   "mise r build-circuit-*",
   "mkdir -p ../web/public/src/",
   "cp src/lib.cairo dist/worker.js ../web/public/",
+  "cp node_modules/@cryptonerdcn/wasm-cairo/wasm-cairo_bg.wasm ../web/public/",
 ]
 
 [tasks.build-web]

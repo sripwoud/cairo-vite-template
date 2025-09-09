@@ -1,7 +1,26 @@
 import init, { runCairoProgram } from '@cryptonerdcn/wasm-cairo'
 import { Err, Ok, type Result } from '@hazae41/result'
-import { expose } from 'comlink'
+import * as Comlink from 'comlink'
 import type { CircuitInput, ProofResult } from './types'
+
+// Comlink transfer handler for Result types (must match client)
+Comlink.transferHandlers.set('result', {
+  // biome-ignore lint/suspicious/noExplicitAny: Using generic type for Result
+  canHandle: (obj: any): obj is Result<any, any> => {
+    return (obj?.constructor.name === 'Ok' || obj?.constructor.name === 'Err')
+  },
+  // biome-ignore lint/suspicious/noExplicitAny: Using generic type for Result
+  serialize: (obj: Result<any, any>) => {
+    const serialized = obj.isOk()
+      ? { type: 'Ok', value: obj.inner }
+      : { type: 'Err', error: obj.inner }
+    return [serialized, []]
+  },
+  // biome-ignore lint/suspicious/noExplicitAny: Using generic type for Result
+  deserialize: (obj: any) => {
+    return obj.type === 'Ok' ? new Ok(obj.value) : new Err(obj.error)
+  },
+})
 
 export type CircuitWorkerAPI = {
   ping(): Promise<string>
@@ -19,7 +38,9 @@ class CircuitWorker implements CircuitWorkerAPI {
 
   async initialize(): Promise<Result<void, string>> {
     try {
-      await init()
+      // Use the WASM file we copied to the public directory
+      // This avoids the MIME type issues with module resolution
+      await init('/wasm-cairo_bg.wasm')
       this.initialized = true
       console.log('Cairo WASM initialized successfully')
       return new Ok(undefined)
@@ -111,4 +132,4 @@ fn main() -> bool {
 }
 
 const worker = new CircuitWorker()
-expose(worker)
+Comlink.expose(worker)

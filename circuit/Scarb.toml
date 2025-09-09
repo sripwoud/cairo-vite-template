@@ -1,5 +1,5 @@
 [cairo]
-enable-gas = false
+# enable-gas = false
 
 [package]
 name = "circuit"
@@ -10,10 +10,13 @@ edition = "2024_07"
 
 [dependencies]
 cairo_execute = "2.12.1"
+starknet = ">=2.12.1"
 
 [dev-dependencies]
 cairo_test = "2.12.1"
 
-[[target.executable]]
-name = "main"
-function = "circuit::main"
+# [[target.executable]]
+# name = "main"
+# function = "circuit::main"
+
+[[target.starknet-contract]]

@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       esbuildOptions: { target: 'esnext' },
-      exclude: ['@noir-lang/noirc_abi', '@noir-lang/acvm_js'],
+      exclude: ['@cryptonerdcn/wasm-cairo'],
     },
     build: {
       rollupOptions: {

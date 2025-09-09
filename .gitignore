@@ -1,5 +1,6 @@
 .claude
 CLAUDE.md
+circuit/proof.json
 dist
 node_modules
 coverage

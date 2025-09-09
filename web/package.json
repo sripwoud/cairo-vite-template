@@ -11,6 +11,7 @@
     "@tanstack/react-form": "^0.42.0",
     "@tanstack/react-router": "^1.105.0",
     "@tanstack/react-router-devtools": "^1.130.13",
+    "circuit": "workspace:*",
     "jotai": "^2.12.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

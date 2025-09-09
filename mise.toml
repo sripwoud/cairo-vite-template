@@ -1,13 +1,41 @@
+[env]
+CAIRO_PROVE_PATH = "circuit/stwo-cairo/cairo-prove/target/release/cairo-prove"
+CIRCUIT_EXECUTABLE_PATH = "circuit/target/release/main.executable.json"
+PROOF_PATH = "circuit/proof.json"
+
+[tasks.cairo-prove]
+alias = "cp"
+description = "cairo-prove"
+run = "$CAIRO_PROVE_PATH"
+
 [tasks.fix]
-alias = "bf"
+alias = "f"
 description = "Apply biome safe fixes and format code"
 run = ["biome check --fix --config-path=biome.jsonc", "dprint fmt"]
 
+[tasks.build-circuit-types]
+dir = "circuit"
+hide = true
+run = "tsc --project tsconfig.build.json"
+quiet = true
+
+[tasks.build-circuit-dist]
+dir = "circuit"
+hide = true
+run = "bun build.ts"
+quiet = true
+
 [tasks.build-circuit]
 alias = "bc"
-description = "Buil circuit"
+description = "Bundle circuit pkg"
 dir = "circuit"
-run = "scarb --release build"
+run = [
+  "rm -fr dist target",
+  "scarb --release build",
+  "mise r build-circuit-*",
+  "mkdir -p ../web/public/src/",
+  "cp src/lib.cairo dist/worker.js ../web/public/",
+]
 
 [tasks.build-web]
 alias = "bw"
@@ -32,11 +60,15 @@ dir = "web"
 run = ["mise run build-circuit", "bun vite"]
 quiet = true
 
-[tasks.execute-circuit]
-alias = "ec"
-description = "Execute the circuit with arguments - Usage: mise r ec {argument}"
-dir = "circuit"
-run = "scarb execute -p circuit --print-program-output --arguments"
+[tasks.prove]
+alias = "p"
+description = "Execute the circuit with arguments - Usage: mise r p {argument}"
+run = "mise r cp prove $CIRCUIT_EXECUTABLE_PATH $PROOF_PATH --arguments"
+
+[tasks.verify]
+alias = "v"
+description = "Verify the proof"
+run = "mise r cp verify $PROOF_PATH"
 
 [tasks.preview]
 alias = "p"

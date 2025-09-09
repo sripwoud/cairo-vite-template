@@ -1,5 +1,5 @@
 fn is_over_eighteen(age: u32) -> bool {
-  age > 18
+    age > 18
 }
 
 #[executable]
@@ -14,7 +14,7 @@ mod tests {
 
     #[test]
     fn it_is_true_if_over_eighteen() {
-       assert!( is_over_eighteen(19));
+        assert!(is_over_eighteen(19));
     }
 
     #[test]

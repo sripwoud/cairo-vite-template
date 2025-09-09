@@ -54,12 +54,24 @@ EOF
   chmod +x .git/hooks/commit-msg
 }
 
+init_submodules() {
+  git submodule update --init
+}
+
+build_cairo_prove() {
+  cd circuit/stwo-cairo/cairo-prove
+  ./build.sh
+}
+
 main() {
   maybe_install_mise
   mise install && log "✅ Installed dev tools and runtimes"
   use_convco_as_git_editor_only_on_main
   hk install && log "✅ Configured git hooks"
   bun i && log "✅ Installed node deps"
+  init_submodules
+  build_cairo_prove
+
   log "🎉 Setup complete "
   log "To see available tasks: ${ORANGE}mise run$RESET"
 }

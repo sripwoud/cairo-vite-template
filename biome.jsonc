@@ -6,7 +6,7 @@
     "actions": { "source": { "organizeImports": "off", "useSortedAttributes": "on", "useSortedProperties": "on" } },
   },
   "files": {
-    "includes": ["**", "!**/routeTree.gen.ts", "!**/dist", "!**/public"],
+    "includes": ["**", "!**/routeTree.gen.ts", "!**/dist", "!**/public", "!**/circuit/proof.json", "!**/stwo-cairo"],
   },
   // format with dprint
   "formatter": {

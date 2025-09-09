@@ -1,5 +1,5 @@
 {
-  "excludes": ["web/src/routeTree.gen.ts"],
+  "excludes": ["web/src/routeTree.gen.ts", "**/stwo-cairo"],
   "exec": {
     "commands": [{ "command": "cairo-format -", "exts": ["cairo"] }],
   },

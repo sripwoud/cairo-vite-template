@@ -1,4 +1,4 @@
-import { Err, Ok, Result } from '@hazae41/result'
+import { Err, Ok, type Result } from '@hazae41/result'
 import * as Comlink from 'comlink'
 
 // Comlink transfer handler for Result types (must match worker)

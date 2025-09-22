@@ -1,4 +1,6 @@
 name: main
+permissions:
+  contents: read
 on:
   # push trigger required to get coveralls monitoring of default branch
   # pull_request required to get PR coveralls comments

@@ -7,9 +7,11 @@ local linters  = new Mapping<String, Step> {
   }
   ["lint"] {
     check = "biome check --config-path=biome.jsonc --no-errors-on-unmatched {{files}}"
+    glob = List("*.js", "*.ts", "*.tsx")
   }
   ["typecheck"] {
     check = "tsc -p web/tsconfig.app.json"
+    glob = List("*.js", "*.ts", "*.tsx")
   }
 }
 
